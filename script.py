@@ -16,24 +16,9 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+# Based on the example code in these two pages
 # https://developers.google.com/youtube/v3/guides/uploading_a_video
 # https://github.com/googleapis/google-api-python-client/blob/main/docs/oauth.md
-
-
-# example command
-# python upload_video.py --file="/tmp/test_video_file.flv"
-#                       --title="Summer vacation in California"
-#                       --description="Had fun surfing in Santa Cruz"
-#                       --keywords="surfing,Santa Cruz"
-#                       --category="22"
-#                       --privacy-status="private"
-
-
-# Requirements
-# - auto upload with title, description, keywords, category, and privacy status
-# - scheduled public?
-# - retries automatically if fails
-
 
 # Explicitly tell the underlying HTTP transport library not to retry, since
 # we are handling retry logic ourselves.
@@ -192,7 +177,7 @@ def main():
   parser.add_argument("--publish-at-date", type=valid_date, default=None,
                       help="Date to publish video (format is YYYY-MM-DD)", required=False)
   parser.add_argument("--publish-at-time", type=valid_time, default=None,
-                      help="Date to publish video (format is YYYY-MM-DD)", required=False)
+                      help="Time to publish video (isoformat)", required=False)
   parser.add_argument("--client-secrets-file", help="Path to client secrets json file",
                       default="youtube-uploader-client-credentials.json", required=False)
   args = parser.parse_args()
