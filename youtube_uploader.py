@@ -160,8 +160,8 @@ def resumable_upload(insert_request):
       print(("Sleeping %f seconds and then retrying..." % sleep_seconds))
       time.sleep(sleep_seconds)
 
-# TODO: see about getting app verified
-def main():
+
+def upload_video_with_args():
   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=True)
   parser.add_argument("--file", required=True, help="Video file to upload")
   parser.add_argument("--title", help="Video title", default="Test Title")
@@ -182,11 +182,7 @@ def main():
                       default="youtube-uploader-client-credentials.json", required=False)
   args = parser.parse_args()
 
-  # Make sure the upload file exists
-  if not os.path.exists(args.file):
-    exit("Please specify a valid file using the --file= parameter.")
-
-  # Compile the publish time if applicable
+    # Compile the publish time if applicable
   if (args.publish_at_date is not None and args.publish_at_time is None) or \
      (args.publish_at_date is None and args.publish_at_time is not None):
      exit("Must specify both publish_at date and time for scheduling")
@@ -194,17 +190,27 @@ def main():
   if args.publish_at_date is not None:
     publish_at = datetime.datetime.combine(args.publish_at_date, args.publish_at_time)
 
-  youtube = get_authenticated_service(args.client_secrets_file)
+  upload_video(args.file, args.title, args.description, args.category, args.keywords,
+               args.privacy_status, publish_at, args.client_secrets_file)
+
+
+def upload_video(file, title, description, category, keywords,
+                 privacy_status, publish_at, client_secrets_file):
+  # Make sure the upload file exists
+  if not os.path.exists(file):
+    exit("Please specify a valid file using the --file= parameter.")
+
+  youtube = get_authenticated_service(client_secrets_file)
   try:
-    initialize_upload(youtube, args.file, args.title, args.description,
-                      args.category, args.keywords, args.privacy_status, publish_at)
+    initialize_upload(youtube, file, title, description,
+                      category, keywords, privacy_status, publish_at)
   except HttpError as e:
     print(("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)))
 
 
 if __name__ == "__main__":
   try:
-    main()
+    upload_video_with_args()
   except KeyboardInterrupt:
     # The user asked the program to exit
     sys.exit(1)
