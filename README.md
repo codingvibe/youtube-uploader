@@ -7,7 +7,7 @@ Updated version of the Python YouTube upload example from Google with extra comm
 
 ## Run the script
 
-`python script.py <arguments>`
+`python youtube_uploader.py <arguments>`
 
 ### Command line arguments
 
