@@ -1,8 +1,12 @@
-#!/usr/bin/env python
+import setuptools
 
-from distutils.core import setup
-
-setup(name='youtube_uploader',
+setuptools.setup(name='youtube_uploader',
+      packages=setuptools.find_packages(),
+      install_requirements=[
+        "google_api_python_client",
+        "google_auth_oauthlib",
+        "httplib2"
+      ],
       version='1.0',
       description='Upload a video to YouTube',
       author='CodingVibe',
